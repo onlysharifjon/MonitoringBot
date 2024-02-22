@@ -2,7 +2,8 @@ import logging
 from aiogram.types import ReplyKeyboardRemove
 from aiogram import Bot, Dispatcher, types, executor
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
-
+from aiogram.dispatcher import FSMContext
+from aiogram.dispatcher.filters.state import State, StatesGroup
 from environs import Env
 
 env = Env()
@@ -11,6 +12,12 @@ env.read_env()
 BOT_TOKEN = env.str("API_TOKEN")  # Bot toekn
 ADMINS = env.list("ADMINS")  # adminlar ro'yxati
 XODIMLAR = env.list("XODIMLAR")  # xodimlar ro'yxati
+
+
+class Shogirdchalar(StatesGroup):
+    keldim = State()
+    ketdim = State()
+
 
 from keyboards.default import admin, xodim, location_button
 
@@ -32,21 +39,43 @@ async def boshlovchi(message: types.Message):
         await message.answer('Siz Bu botddan foydalanish huquqiga ega emassiz')
 
 
-@dp.message_handler(text="📝 Ketdim")
+@dp.message_handler(text="📝 Ketdim", state="*")
 async def ketdim(message: types.Message):
     await message.answer('Manzilingizni jo`nating!', reply_markup=location_button)
+    await Shogirdchalar.ketdim.set()
 
 
-@dp.message_handler(text="📝 Keldim")
+@dp.message_handler(text="📝 Keldim", state="*")
 async def keldim(message: types.Message):
     await message.answer('Manzilingizni jo`nating!', reply_markup=location_button)
+    await Shogirdchalar.keldim.set()
 
 
-@dp.message_handler(content_types=types.ContentType.LOCATION)
-async def locator(message: types.Message):
+@dp.message_handler(content_types=types.ContentType.LOCATION, state=Shogirdchalar.ketdim)
+async def locator_ketdim(message: types.Message):
+    loc = message.location
+    await bot.send_message(int(ADMINS[0]), f"{message.from_user.full_name} ishdan ketdi")
+    await bot.send_location(int(ADMINS[0]), longitude=loc['longitude'], latitude=loc['latitude'])
+    await message.answer('Manzilingiz Adminga Jo`natildi', reply_markup=xodim)
+
+
+from database import keldi_monitoring
+
+
+@dp.message_handler(content_types=types.ContentType.LOCATION, state=Shogirdchalar.keldim)
+async def locator_keldim(message: types.Message):
     loc = message.location
     await bot.send_message(int(ADMINS[0]), f"{message.from_user.full_name} ishga keldi")
     await bot.send_location(int(ADMINS[0]), longitude=loc['longitude'], latitude=loc['latitude'])
+    await message.answer('Manzilingiz Adminga Jo`natildi', reply_markup=xodim)
+    vaqt = str(message.date)
+    list_vaqt = vaqt.split()
+    await keldi_monitoring(message.from_user.id, str(loc['longitude']), str(loc['latitude']), list_vaqt[1],message.date.day
+                           ,message.date.month)
+
+
+    # await keldi_monitoring()
+
 
 
 if __name__ == '__main__':
