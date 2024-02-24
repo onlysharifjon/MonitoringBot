@@ -59,23 +59,33 @@ async def locator_ketdim(message: types.Message):
     await message.answer('Manzilingiz Adminga Jo`natildi', reply_markup=xodim)
 
 
-from database import keldi_monitoring
+from database import keldi_monitoring, ketdi_monitoring, xatolik
 
 
 @dp.message_handler(content_types=types.ContentType.LOCATION, state=Shogirdchalar.keldim)
 async def locator_keldim(message: types.Message):
     loc = message.location
+
     await bot.send_message(int(ADMINS[0]), f"{message.from_user.full_name} ishga keldi")
-    await bot.send_location(int(ADMINS[0]), longitude=loc['longitude'], latitude=loc['latitude'])
+    await bot.send_location(int(ADMINS[0]), longitude=loc.longitude, latitude=loc.latitude)
     await message.answer('Manzilingiz Adminga Jo`natildi', reply_markup=xodim)
     vaqt = str(message.date)
     list_vaqt = vaqt.split()
-    await keldi_monitoring(message.from_user.id, str(loc['longitude']), str(loc['latitude']), list_vaqt[1],message.date.day
-                           ,message.date.month)
+    await keldi_monitoring(message.from_user.id, str(loc.longitude), str(loc.latitude), list_vaqt[1],
+                           message.date.day, message.date.month, message.date.year)
 
 
-    # await keldi_monitoring()
-
+@dp.message_handler(content_types=types.ContentType.LOCATION)
+async def locator_ketdim(message: types.Message):
+    vaqt = str(message.date)
+    list_vaqt = vaqt.split()
+    try:
+        print(True)
+        await ketdi_monitoring(message.from_user.id, list_vaqt[1], str(message.date.day), str(message.date.day))
+        await message.answer('Xayr sog`bo`ling')
+    except:
+        print(False)
+        await xatolik(message.from_user.id, message.date.day)
 
 
 if __name__ == '__main__':
