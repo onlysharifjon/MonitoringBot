@@ -39,24 +39,19 @@ async def boshlovchi(message: types.Message):
         await message.answer('Siz Bu botddan foydalanish huquqiga ega emassiz')
 
 
-@dp.message_handler(text="📝 Ketdim", state="*")
-async def ketdim(message: types.Message):
-    await message.answer('Manzilingizni jo`nating!', reply_markup=location_button)
-    await Shogirdchalar.ketdim.set()
+from database import keldi_check
 
 
 @dp.message_handler(text="📝 Keldim", state="*")
 async def keldim(message: types.Message):
-    await message.answer('Manzilingizni jo`nating!', reply_markup=location_button)
-    await Shogirdchalar.keldim.set()
+    natija = await keldi_check(message.from_user.id, message.date.day, message.date.month, message.date.year)
+    print(natija)
+    if natija is None:
+        await message.answer('Manzilingizni jo`nating!', reply_markup=location_button)
+        await Shogirdchalar.keldim.set()
+    else:
+        await message.answer('Siz Bugun ishga kelgansiz Yoqol')
 
-
-@dp.message_handler(content_types=types.ContentType.LOCATION, state=Shogirdchalar.ketdim)
-async def locator_ketdim(message: types.Message):
-    loc = message.location
-    await bot.send_message(int(ADMINS[0]), f"{message.from_user.full_name} ishdan ketdi")
-    await bot.send_location(int(ADMINS[0]), longitude=loc['longitude'], latitude=loc['latitude'])
-    await message.answer('Manzilingiz Adminga Jo`natildi', reply_markup=xodim)
 
 
 from database import keldi_monitoring, ketdi_monitoring, xatolik
@@ -75,7 +70,13 @@ async def locator_keldim(message: types.Message):
                            message.date.day, message.date.month, message.date.year)
 
 
-@dp.message_handler(content_types=types.ContentType.LOCATION)
+@dp.message_handler(text="📝 Ketdim", state="*")
+async def ketdim(message: types.Message):
+    await message.answer('Manzilingizni jo`nating!', reply_markup=location_button)
+    await Shogirdchalar.ketdim.set()
+
+
+@dp.message_handler(content_types=types.ContentType.LOCATION, state=Shogirdchalar.ketdim)
 async def locator_ketdim(message: types.Message):
     vaqt = str(message.date)
     list_vaqt = vaqt.split()
