@@ -8,40 +8,15 @@ async def keldi_check(id_user, keldi_kun, oy, yil):
     cursor.execute(
         "CREATE TABLE IF NOT EXISTS monitoring(ID INTEGER PRIMARY KEY AUTOINCREMENT, user_id BIGINT,longitude TEXT,latitude TEXT,keldi TEXT NULL,keldi_kun INTEGER NULL,ketdi TEXT NULL,ketdi_kun INTEGER NULL,oy INTEGER,yil INTEGER)")
     connect.commit()
-    check = cursor.execute("SELECT * FROM monitoring WHERE user_id=? AND keldi_kun=? AND oy=? AND yil=?", (id_user,keldi_kun,oy,yil)).fetchone()
-    return check
-
-async def ketdi_check(id_user, keldi_kun, oy, yil):
-    cursor.execute(
-        "CREATE TABLE IF NOT EXISTS monitoring(ID INTEGER PRIMARY KEY AUTOINCREMENT, user_id BIGINT,longitude TEXT,latitude TEXT,keldi TEXT NULL,keldi_kun INTEGER NULL,ketdi TEXT NULL,ketdi_kun INTEGER NULL,oy INTEGER,yil INTEGER)")
-    connect.commit()
-    check = cursor.execute("SELECT * FROM monitoring WHERE user_id=? AND keldi_kun=? AND oy=? AND yil=?", (id_user,keldi_kun,oy,yil)).fetchone()
+    check = cursor.execute("SELECT * FROM monitoring WHERE user_id=? AND keldi_kun=? AND oy=? AND yil=?",
+                           (id_user, keldi_kun, oy, yil)).fetchone()
     return check
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+async def ketdi_check(id_user, ketdi_kun, oy, yil,*args, **partial_data):
+    filtr_ketdi = cursor.execute("SELECT * FROM monitoring WHERE user_id=? AND ketdi_kun=? AND oy=? AND yil=?",
+                                 (id_user, ketdi_kun, oy, yil)).fetchone()
+    return filtr_ketdi
 
 
 async def keldi_monitoring(user_id, longitude, latitude, keldi, keldi_kun, oy, yil):

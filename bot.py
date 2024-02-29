@@ -72,12 +72,11 @@ from database import ketdi_check
 @dp.message_handler(text="📝 Ketdim", state="*")
 async def ketdim(message: types.Message):
     natija = await ketdi_check(message.from_user.id, message.date.day, message.date.month, message.date.year)
-    print(natija)
     if natija is None:
-        await message.answer('Manzilingizni jo`nating!', reply_markup=location_button)
+        await message.answer("Manzilingiznini Jo`nating")
         await Shogirdchalar.ketdim.set()
     else:
-        await message.answer('Ishdan ketin qovun')
+        await message.answer("Siz bugun Ishdan Ketgansiz")
 
 
 from database import keldi_monitoring, ketdi_monitoring, xatolik
