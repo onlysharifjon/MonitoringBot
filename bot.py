@@ -53,10 +53,6 @@ async def keldim(message: types.Message):
         await message.answer('Siz Bugun ishga kelgansiz Yoqol')
 
 
-
-from database import keldi_monitoring, ketdi_monitoring, xatolik
-
-
 @dp.message_handler(content_types=types.ContentType.LOCATION, state=Shogirdchalar.keldim)
 async def locator_keldim(message: types.Message):
     loc = message.location
@@ -70,10 +66,21 @@ async def locator_keldim(message: types.Message):
                            message.date.day, message.date.month, message.date.year)
 
 
+from database import ketdi_check
+
+
 @dp.message_handler(text="📝 Ketdim", state="*")
 async def ketdim(message: types.Message):
-    await message.answer('Manzilingizni jo`nating!', reply_markup=location_button)
-    await Shogirdchalar.ketdim.set()
+    natija = await ketdi_check(message.from_user.id, message.date.day, message.date.month, message.date.year)
+    print(natija)
+    if natija is None:
+        await message.answer('Manzilingizni jo`nating!', reply_markup=location_button)
+        await Shogirdchalar.ketdim.set()
+    else:
+        await message.answer('Ishdan ketin qovun')
+
+
+from database import keldi_monitoring, ketdi_monitoring, xatolik
 
 
 @dp.message_handler(content_types=types.ContentType.LOCATION, state=Shogirdchalar.ketdim)
