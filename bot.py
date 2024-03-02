@@ -17,6 +17,8 @@ XODIMLAR = env.list("XODIMLAR")  # xodimlar ro'yxati
 class Shogirdchalar(StatesGroup):
     keldim = State()
     ketdim = State()
+    new_xodim_name = State()
+    new_xodim_id = State()
 
 
 from keyboards.default import admin, xodim, location_button
@@ -37,12 +39,6 @@ async def boshlovchi(message: types.Message):
         await message.answer('Siz Xodimsiz', reply_markup=xodim)
     else:
         await message.answer('Siz Bu botddan foydalanish huquqiga ega emassiz')
-
-
-@dp.message_handler(text="Xodimlar ro`yxati")
-async def xodim_royxat(message: types.Message):
-    await message.answer(f"Xodimlar ro'yxati:\n{XODIMLAR[0]}\n{XODIMLAR[1]}\n{XODIMLAR[2]}\n{XODIMLAR[3]}\n{XODIMLAR[4]}\n{XODIMLAR[5]}\n{XODIMLAR[6]}\n{XODIMLAR[7]}\n{XODIMLAR[8]}\n{XODIMLAR[9]}\n",reply_markup=admin)
-
 
 
 from database import keldi_check
@@ -101,5 +97,8 @@ async def locator_ketdim(message: types.Message):
         await xatolik(message.from_user.id, message.date.day)
 
 
+
+
 if __name__ == '__main__':
+    from admin import dp
     executor.start_polling(dp, skip_updates=True)
