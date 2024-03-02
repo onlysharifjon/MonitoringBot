@@ -39,6 +39,12 @@ async def boshlovchi(message: types.Message):
         await message.answer('Siz Bu botddan foydalanish huquqiga ega emassiz')
 
 
+@dp.message_handler(text="Xodimlar ro`yxati")
+async def xodim_royxat(message: types.Message):
+    await message.answer(f"Xodimlar ro'yxati:\n{XODIMLAR[0]}\n{XODIMLAR[1]}\n{XODIMLAR[2]}\n{XODIMLAR[3]}\n{XODIMLAR[4]}\n{XODIMLAR[5]}\n{XODIMLAR[6]}\n{XODIMLAR[7]}\n{XODIMLAR[8]}\n{XODIMLAR[9]}\n",reply_markup=admin)
+
+
+
 from database import keldi_check
 
 
