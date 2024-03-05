@@ -11,7 +11,8 @@ env.read_env()
 
 BOT_TOKEN = env.str("API_TOKEN")  # Bot toekn
 ADMINS = env.list("ADMINS")  # adminlar ro'yxati
-XODIMLAR = env.list("XODIMLAR")  # xodimlar ro'yxati
+# XODIMLAR = env.list("XODIMLAR")  # xodimlar ro'yxati
+
 
 
 class Shogirdchalar(StatesGroup):
@@ -19,10 +20,11 @@ class Shogirdchalar(StatesGroup):
     ketdim = State()
     new_xodim_name = State()
     new_xodim_id = State()
+    xodim_ochirish = State()
 
 
 from keyboards.default import admin, xodim, location_button
-
+from database import connect,cursor
 # ------------------------DATABASE--------------------
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=BOT_TOKEN, parse_mode='HTML')
@@ -31,11 +33,21 @@ dp = Dispatcher(bot, storage=MemoryStorage())
 
 @dp.message_handler(commands='start')
 async def boshlovchi(message: types.Message):
+    XODIMLAR_TEST = cursor.execute("SELECT user_id FROM xodimlar").fetchall()
+    XODIMLAR = []
+    for i in XODIMLAR_TEST:
+        XODIMLAR.append(i[0])
+    print(XODIMLAR)
+
+
+
+
     await message.answer('Assalomu Aleykum ' + message.from_user.first_name)
-    print(ADMINS)
+
     if str(message.from_user.id) in ADMINS:
         await message.answer('Siz admin ekansiz', reply_markup=admin)
-    elif str(message.from_user.id) in XODIMLAR:
+    elif message.from_user.id in XODIMLAR:
+        XODIMLAR = []
         await message.answer('Siz Xodimsiz', reply_markup=xodim)
     else:
         await message.answer('Siz Bu botddan foydalanish huquqiga ega emassiz')
