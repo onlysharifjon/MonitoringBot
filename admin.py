@@ -79,3 +79,30 @@ async  def day_1(message:types.Message):
         txt+=f"Keldim: <i>{i[4]}</i> Ketdim: <i>{i[6]}</i>\n\n"
         print(i)
     await message.answer(txt)
+from aiogram.types import  InlineKeyboardButton, InlineKeyboardMarkup
+@dp.message_handler(text = '📝 7 kunlik ma`lumot')
+async def kun7_monitoring(message :types.Message):
+    if str(message.from_user.id) in ADMINS:
+        xodimchalar = cursor.execute('SELECT name FROM xodimlar').fetchall()
+
+        xodimlar_inline_button =InlineKeyboardMarkup()
+
+        for i in xodimchalar:
+            print(i)
+            xodimlar_inline_button.add(InlineKeyboardButton(text=f"{i[0]}",callback_data=f"{i[0]}"))
+        await message.answer('⏬   Xodimlar   ⏬',reply_markup=xodimlar_inline_button)
+    else:
+        await message.answer("Siz admin emassiz")
+@dp.callback_query_handler()
+async def xodim_nomi(call : types.CallbackQuery):
+    await call.message.delete()
+    print(call.data)
+    xodim_id = cursor.execute(f'SELECT user_id FROM xodimlar WHERE name=?',(call.data,)).fetchone()
+    xodim_id = xodim_id[0]
+
+    kun_7 = cursor.execute("SELECT * FROM monitoring WHERE user_id=?",(xodim_id,)).fetchall()
+    txt = ""
+    for i in kun_7:
+        txt+=f"{i}\n"
+    await call.message.answer(txt)
+

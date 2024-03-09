@@ -87,7 +87,7 @@ from database import ketdi_check
 async def ketdim(message: types.Message):
     natija = await ketdi_check(message.from_user.id, message.date.day, message.date.month, message.date.year)
     if natija is None:
-        await message.answer("Manzilingiznini Jo`nating")
+        await message.answer("Manzilingiznini Jo`nating",reply_markup=location_button)
         await Shogirdchalar.ketdim.set()
     else:
         await message.answer("Siz bugun Ishdan Ketgansiz")
