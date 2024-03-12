@@ -39,18 +39,15 @@ async def boshlovchi(message: types.Message):
         XODIMLAR.append(i[0])
     print(XODIMLAR)
 
-
-
-
-    await message.answer('Assalomu Aleykum ' + message.from_user.first_name)
+    await message.answer('Assalomu Aleykum 👤' + message.from_user.first_name)
 
     if str(message.from_user.id) in ADMINS:
-        await message.answer('Siz admin ekansiz', reply_markup=admin)
+        await message.answer('👨🏻‍🔧 Siz admin ekansiz', reply_markup=admin)
     elif message.from_user.id in XODIMLAR:
         XODIMLAR = []
-        await message.answer('Siz Xodimsiz', reply_markup=xodim)
+        await message.answer('👨🏻‍💻 Siz Xodimsiz', reply_markup=xodim)
     else:
-        await message.answer('Siz Bu botddan foydalanish huquqiga ega emassiz')
+        await message.answer('❌ Siz Bu botddan foydalanish huquqiga ega emassiz 🚷')
 
 
 from database import keldi_check
@@ -107,8 +104,6 @@ async def locator_ketdim(message: types.Message):
     except:
         print(False)
         await xatolik(message.from_user.id, message.date.day)
-
-
 
 
 if __name__ == '__main__':
