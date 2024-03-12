@@ -110,3 +110,4 @@ async def xodim_nomi(call: types.CallbackQuery):
         txt+=f"\n\n⏳{i[9]}-{i[8]}-{i[7]}_______________\n\n🆔: {i[1]}\n📍 {i[2],i[3]}\n➡️ Keldi ⌚️: {i[4]}\n⬅️ Ketdi ⌚️: {i[6]}"
     await call.message.answer(txt)
 
+#
