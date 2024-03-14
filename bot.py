@@ -37,7 +37,7 @@ async def boshlovchi(message: types.Message):
     XODIMLAR = []
     for i in XODIMLAR_TEST:
         XODIMLAR.append(i[0])
-    print(XODIMLAR)
+
 
     await message.answer('Assalomu Aleykum 👤' + message.from_user.first_name)
 
@@ -56,7 +56,7 @@ from database import keldi_check
 @dp.message_handler(text="📝 Keldim", state="*")
 async def keldim(message: types.Message):
     natija = await keldi_check(message.from_user.id, message.date.day, message.date.month, message.date.year)
-    print(natija)
+
     if natija is None:
         await message.answer('Manzilingizni jo`nating!', reply_markup=location_button)
         await Shogirdchalar.keldim.set()
@@ -98,11 +98,11 @@ async def locator_ketdim(message: types.Message):
     vaqt = str(message.date)
     list_vaqt = vaqt.split()
     try:
-        print(True)
+
         await ketdi_monitoring(message.from_user.id, list_vaqt[1], str(message.date.day), str(message.date.day))
         await message.answer('Xayr sog`bo`ling')
     except:
-        print(False)
+
         await xatolik(message.from_user.id, message.date.day)
 
 

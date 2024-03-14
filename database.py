@@ -42,7 +42,7 @@ async def ketdi_monitoring(user_id, ketdi, keldi_kun, ketdi_kun):
     cursor.execute("UPDATE monitoring SET ketdi_kun=? , ketdi=? WHERE user_id=? AND keldi_kun=?",
                    (ketdi_kun, ketdi, user_id, keldi_kun))
     connect.commit()
-    print('Sucsess')
+
 
 
 async def xatolik(user_id, keldi_kun):
