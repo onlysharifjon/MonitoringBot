@@ -134,8 +134,8 @@ async def xodim_nomi(call: types.CallbackQuery):
 
 #
 
-
 from openpyxl import Workbook
+from openpyxl.styles import PatternFill,Border, Side
 
 # Create a new Workbook
 wb = Workbook()
@@ -157,13 +157,26 @@ async def month_data(message: types.Message):
 
     # Select the active worksheet
     ws = wb.active
+    cell = ws
 
     # Write "Hello world" in uppercase to cell A1
-    count = 0
+    count: int = 0
     for i in xodimlar_ismlari:
         count += 1
 
         ws.cell(row=count, column=1).value = i
+        red_fill = PatternFill(start_color="FF0000", end_color="FF0000", fill_type="solid")
+        ws.cell(row=count, column=1).fill = red_fill
+
+        thin_border = Border(left=Side(style='medium', color='000000'),
+                             right=Side(style='medium', color='000000'),
+                             top=Side(style='medium', color='000000'),
+                             bottom=Side(style='medium', color='000000'))
+        ws.cell(row=count, column=1).border = thin_border
+
+        ws.column_dimensions['A'].width = 30
+
+
 
     wb.save("monitoring.xlsx")
 
