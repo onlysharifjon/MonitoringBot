@@ -135,7 +135,7 @@ async def xodim_nomi(call: types.CallbackQuery):
 #
 
 from openpyxl import Workbook
-from openpyxl.styles import PatternFill,Border, Side
+from openpyxl.styles import PatternFill, Border, Side
 
 # Create a new Workbook
 wb = Workbook()
@@ -162,7 +162,14 @@ async def month_data(message: types.Message):
     # Write "Hello world" in uppercase to cell A1
     count: int = 0
     for i in xodimlar_ismlari:
+        xodim_id = cursor.execute('SELECT user_id FROM xodimlar WHERE name=?', (i,)).fetchone()
+        xodim_id = xodim_id[0]
+        time_user = cursor.execute('SELECT * FROM monitoring WHERE user_id=?', (xodim_id,)).fetchall()
+
+        print(f"Xodim nomi: {i} vaqtari: {time_user}")
         count += 1
+        for b in time_user:
+            ws.cell(row=count, column=b[5]+1).value = f"Keldi_kun: {b[5]}--{b[4]}// Ketdi_kun: {b[7]}--{b[6]}"
 
         ws.cell(row=count, column=1).value = i
         red_fill = PatternFill(start_color="FF0000", end_color="FF0000", fill_type="solid")
@@ -176,8 +183,8 @@ async def month_data(message: types.Message):
 
         ws.column_dimensions['A'].width = 30
 
-
-
     wb.save("monitoring.xlsx")
+
+    #(2, 6666226459, '69.362487', '41.332299', '16:11:23', 5, '16:11:30', 5, 3, 2024)
 
     print(xodimlar_ismlari)
