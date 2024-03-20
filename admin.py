@@ -170,6 +170,15 @@ async def month_data(message: types.Message):
         count += 1
         for b in time_user:
             ws.cell(row=count, column=b[5]+1).value = f"Keldi_kun: {b[5]}--{b[4]}// Ketdi_kun: {b[7]}--{b[6]}"
+            # Add background color green if there is some information
+            if b[4] or b[6]:
+                thin_border = Border(left=Side(style='medium', color='000000'),
+                                     right=Side(style='medium', color='000000'),
+                                     top=Side(style='medium', color='000000'),
+                                     bottom=Side(style='medium', color='000000'))
+                ws.cell(row=count, column=b[5] + 1).border = thin_border
+                green_fill = PatternFill(start_color="00FF00", end_color="00FF00", fill_type="solid")
+                ws.cell(row=count, column=b[5]+1).fill = green_fill
 
         ws.cell(row=count, column=1).value = i
         red_fill = PatternFill(start_color="FF0000", end_color="FF0000", fill_type="solid")
@@ -181,7 +190,26 @@ async def month_data(message: types.Message):
                              bottom=Side(style='medium', color='000000'))
         ws.cell(row=count, column=1).border = thin_border
 
+        list_alphabet = ["B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+                         'U', 'V', 'W', 'X', 'Y', 'Z']
+        for k in list_alphabet:
+            ws.column_dimensions[k].width = 42
         ws.column_dimensions['A'].width = 30
+
+
+    # Fill empty cells with pink color
+    max_row = ws.max_row
+    max_column = ws.max_column
+    for row in range(1, max_row+1):
+        for column in range(1, max_column+1):
+            if not ws.cell(row=row, column=column).value:
+                pink_fill = PatternFill(start_color="FFC0CB", end_color="FFC0CB", fill_type="solid")
+                ws.cell(row=row, column=column).fill = pink_fill
+                thin_border = Border(left=Side(style='medium', color='000000'),
+                                     right=Side(style='medium', color='000000'),
+                                     top=Side(style='medium', color='000000'),
+                                     bottom=Side(style='medium', color='000000'))
+                ws.cell(row=row, column=column).border = thin_border
 
     wb.save("monitoring.xlsx")
 
