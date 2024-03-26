@@ -169,7 +169,15 @@ async def month_data(message: types.Message):
         print(f"Xodim nomi: {i} vaqtari: {time_user}")
         count += 1
         for b in time_user:
-            ws.cell(row=count, column=b[5]+1).value = f"Keldi_kun: {b[5]}--{b[4]}// Ketdi_kun: {b[7]}--{b[6]}"
+            ws.cell(row=count, column=b[5] + 1).value = f"Keldi_kun: {b[5]}--{b[4]}// Ketdi_kun: {b[7]}--{b[6]}"
+
+            green_fill = PatternFill(start_color="00FF00", end_color="00FF00", fill_type="solid")
+            ws.cell(row=count, column=b[5] + 1).fill = green_fill
+            thin_border = Border(left=Side(style='medium', color='000000'),
+                                 right=Side(style='medium', color='000000'),
+                                 top=Side(style='medium', color='000000'),
+                                 bottom=Side(style='medium', color='000000'))
+            ws.cell(row=count, column=b[5] + 1).border = thin_border
 
         ws.cell(row=count, column=1).value = i
         red_fill = PatternFill(start_color="FF0000", end_color="FF0000", fill_type="solid")
@@ -182,9 +190,13 @@ async def month_data(message: types.Message):
         ws.cell(row=count, column=1).border = thin_border
 
         ws.column_dimensions['A'].width = 30
+    list_alphabet = ["B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
+                     'V', 'W', 'X', 'Y', 'Z']
+    for k in list_alphabet:
+        ws.column_dimensions[k].width = 40
 
     wb.save("monitoring.xlsx")
 
-    #(2, 6666226459, '69.362487', '41.332299', '16:11:23', 5, '16:11:30', 5, 3, 2024)
+    # (2, 6666226459, '69.362487', '41.332299', '16:11:23', 5, '16:11:30', 5, 3, 2024)
 
     print(xodimlar_ismlari)
