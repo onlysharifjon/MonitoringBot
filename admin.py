@@ -202,6 +202,7 @@ async def month_data(message: types.Message):
     max_column = ws.max_column
     for row in range(1, max_row+1):
         for column in range(1, max_column+1):
+
             if not ws.cell(row=row, column=column).value:
                 pink_fill = PatternFill(start_color="FFC0CB", end_color="FFC0CB", fill_type="solid")
                 ws.cell(row=row, column=column).fill = pink_fill
@@ -213,6 +214,22 @@ async def month_data(message: types.Message):
 
     wb.save("monitoring.xlsx")
 
-    #(2, 6666226459, '69.362487', '41.332299', '16:11:23', 5, '16:11:30', 5, 3, 2024)
+    #excel file ni jo`natish
+    await message.answer_document(open('monitoring.xlsx','rb'),caption='Xodimlarning 1 oylik kelgan va ketgan ma`lumotlari')
+from keyboards.default import oylik
+@dp.message_handler(text='💸Oylik hisoboti')
+async def oylik_funcsion(message:types.Message):
+    print(ADMINS)
+    print(message.from_user.id)
+    if str(message.from_user.id) in ADMINS:
 
-    print(xodimlar_ismlari)
+        print(True)
+        await message.answer("Menyu yangilandi:)",reply_markup=oylik)
+
+
+from bot import *
+
+@dp.message_handler(text='🔙orqaga')
+async def back(message: types.Message):
+    await message.answer('Orqaga qaytildi',reply_markup=admin)
+

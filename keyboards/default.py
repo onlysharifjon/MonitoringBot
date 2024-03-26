@@ -8,9 +8,12 @@ admin = ReplyKeyboardMarkup(
             KeyboardButton(text="📝 1 kunlik ma`lumot")
         ],
         [
-            KeyboardButton(text="Xodim qo`shish"),
-            KeyboardButton(text="Xodimlar ro`yxati"),
-            KeyboardButton(text="Xodimni o`chirish")
+            KeyboardButton(text="📝Xodim qo`shish"),
+            KeyboardButton(text="📝Xodimlar ro`yxati"),
+            KeyboardButton(text="📝Xodimni o`chirish")
+        ],
+        [
+            KeyboardButton('💸Oylik hisoboti')
         ]
     ],
     resize_keyboard=True
@@ -30,6 +33,23 @@ location_button = ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton('Joylashuv 🚩', request_location=True),
+        ]
+    ],
+    resize_keyboard=True
+
+)
+
+
+oylik = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton('📝Xodim oyligi')
+        ],
+        [
+            KeyboardButton('⌚️Xodim oylik soati')
+        ],
+        [
+            KeyboardButton('🔙orqaga')
         ]
     ],
     resize_keyboard=True
