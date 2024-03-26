@@ -158,7 +158,7 @@ async def month_data(message: types.Message):
     # Select the active worksheet
     ws = wb.active
     cell = ws
-
+#
     # Write "Hello world" in uppercase to cell A1
     count: int = 0
     for i in xodimlar_ismlari:
